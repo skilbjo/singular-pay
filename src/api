@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -eou pipefail
+
+singularpay="https://devapi.singularbillpay.com/v1/transaction"
+#resources_dir="usr/local/resources"
+resources_dir="resources"
+
+  #"tokenizedaccountnumber": "9418594164541111",
+  #"profileid": "17769387905861728919",
+
+tokenize() {
+  json="$(echo \
+        '{"partnerkey": "mobile-api-user-login",' \
+        ' "partnerid": "demo",' \
+        ' "tokenizedaccountnumber": "9418594164541111",' \
+        ' "paymentmode": "card",' \
+        ' "expirymmyy": "1221",' \
+        ' "transactiontype": "auth"}')"
+
+  curl -X POST \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: text/plain' \
+    --data "$json" \
+    "${singularpay}/v1/tokenize"
+}
+
+transaction() {
+  #json='{
+    #"partnerkey": "mobile-api-user-login",
+    #"partnerid": "demo",
+    #"transactiontype": "auth"
+  #}'
+
+  json="$(echo \
+        '{"partnerkey": "mobile-api-user-login",' \
+        ' "partnerid": "demo",' \
+        ' "transactiontype": "auth"}')"
+
+  curl -X POST \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: text/plain' \
+    --data "$json" \
+    "${singularpay}/v1/Transaction"
+}
+
+tokenize
+#transaction
